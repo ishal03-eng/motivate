@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheer Up!</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            font-family: 'Comic Neue', cursive, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffeef8 100%);
+            min-height: 100vh;
+            padding-bottom: 2rem;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .message-box {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .cheer-btn {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 24px;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .cheer-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+        
+        .cheer-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .bubble {
+            position: absolute;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 50%;
+            animation: floatUp 4s infinite ease-in;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(20deg);
+                opacity: 0;
+            }
+        }
+        
+        .sun {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 50%;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            box-shadow: 0 0 20px #ffd166;
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 20px #ffd166;
+            }
+            100% {
+                transform: scale(1.05);
+                box-shadow: 0 0 30px #ffd166;
+            }
+        }
+        
+        .happy-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: confettiDrop 3s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes confettiDrop {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .game-area {
+            position: relative;
+            height: 150px;
+            margin: 2rem 0;
+            overflow: hidden;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .catch-me {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .score-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .progress-container {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #84fab0 0%, #8fd3f4 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="header text-center text-white">
+        <div class="sun"></div>
+        <h1 class="animate__animated animate__bounceIn">Hey There!</h1>
+        <p class="lead">You're amazing and this page is here to remind you of that!</p>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="message-box animate__animated animate__fadeInUp" id="messageBox">
+                    <h2 id="messageText">Click the button below for some positivity!</h2>
+                </div>
+                
+                <div class="text-center">
+                    <div class="happy-icon" id="happyIcon">😊</div>
+                    <button class="cheer-btn" id="cheerBtn">Get Encouragement</button>
+                    <button class="cheer-btn" id="confettiBtn">Celebrate!</button>
+                </div>
+                
+                <div class="game-area" id="gameArea">
+                    <div class="catch-me" id="catchMe"></div>
+                </div>
+                <div class="text-center">
+                    <p>Catch as many happy balls as you can!</p>
+                    <p class="score-display">Score: <span id="score">0</span></p>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Positive messages array
+        const positiveMessages = [
+            "You are capable of amazing things!",
+            "Today is a great day!",
+            "You've survived 100% of your bad days so far!",
+            "You're stronger than you think!",
+            "Your smile can brighten someone's day!",
+            "You are enough just as you are!",
+            "Every small step is progress!",
+            "You're doing better than you think!",
+            "This world is better because you're in it!",
+            "You've got this!",
+            "Your potential is limitless!",
+            "You are worthy of love and happiness!"
+        ];
+        
+        // Animation effects for message box
+        const animations = [
+            'animate__tada',
+            'animate__bounce',
+            'animate__rubberBand',
+            'animate__swing',
+            'animate__heartBeat'
+        ];
+        
+        // DOM elements
+        const cheerBtn = document.getElementById('cheerBtn');
+        const confettiBtn = document.getElementById('confettiBtn');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const happyIcon = document.getElementById('happyIcon');
+        const gameArea = document.getElementById('gameArea');
+        const catchMe = document.getElementById('catchMe');
+        const scoreElement = document.getElementById('score');
+        const progressBar = document.getElementById('progressBar');
+        
+        // Game variables
+        let score = 0;
+        let gameInterval;
+        let progress = 0;
+        
+        // Random messages
+        cheerBtn.addEventListener('click', function() {
+            // Remove any previous animation classes
+            messageBox.classList.remove(...animations);
+            happyIcon.classList.remove('animate__bounce');
+            
+            // Add new animation classes
+            const randomAnim = animations[Math.floor(Math.random() * animations.length)];
+            messageBox.classList.add('animate__animated', randomAnim);
+            happyIcon.classList.add('animate__animated', 'animate__bounce');
+            
+            // Display random message
+            const randomMsg = positiveMessages[Math.floor(Math.random() * positiveMessages.length)];
+            messageText.textContent = randomMsg;
+            
+            // Create bubbles
+            createBubbles();
+        });
+        
+        // Confetti celebration
+        confettiBtn.addEventListener('click', function() {
+            createConfetti();
+            happyIcon.classList.add('animate__animated', 'animate__rubberBand');
+            setTimeout(() => {
+                happyIcon.classList.remove('animate__animated', 'animate__rubberBand');
+            }, 1000);
+        });
+        
+        // Create floating bubbles
+        function createBubbles() {
+            for (let i = 0; i < 10; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // Random properties
+                const size = Math.random() * 30 + 10;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 3;
+                
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                bubble.style.left = `${left}%`;
+                bubble.style.bottom = `0px`;
+                bubble.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(bubble);
+                
+                // Remove bubble after animation completes
+                setTimeout(() => {
+                    bubble.remove();
+                }, 4000);
+            }
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#ff9a9e', '#a18cd1', '#fbc2eb', '#8fd3f4', '#84fab0'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Random properties
+                const size = Math.random() * 10 + 5;
+                const left = Math.random() * 100;
+                const delay = Math.random() * 3;
+                const duration = Math.random() * 2 + 2;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                confetti.style.left = `${left}%`;
+                confetti.style.backgroundColor = color;
+                confetti.style.top = `-20px`;
+                confetti.style.animationDuration = `${duration}s`;
+                confetti.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+        }
+        
+        // Game logic
+        function startGame() {
+            moveCatchMe();
+            gameInterval = setInterval(moveCatchMe, 1500);
+        }
+        
+        function moveCatchMe() {
+            const gameWidth = gameArea.offsetWidth - 40;
+            const gameHeight = gameArea.offsetHeight - 40;
+            
+            const randomX = Math.random() * gameWidth;
+            const randomY = Math.random() * gameHeight;
+            
+            catchMe.style.left = `${randomX}px`;
+            catchMe.style.top = `${randomY}px`;
+        }
+        
+        catchMe.addEventListener('click', function() {
+            score++;
+            scoreElement.textContent = score;
+            
+            // Update progress bar
+            progress = Math.min(100, progress + 10);
+            progressBar.style.width = `${progress}%`;
+            
+            // Change color based on progress
+            if (progress > 70) {
+                progressBar.style.background = 'linear-gradient(90deg, #84fab0 0%, #8fd3f4 100%)';
+            } else if (progress > 40) {
+                progressBar.style.background = 'linear-gradient(90deg, #a1c4fd 0%, #c2e9fb 100%)';
+            } else {
+                progressBar.style.background = 'linear-gradient(90deg, #ff9a9e 0%, #fad0c4 100%)';
+            }
+            
+            // Animation effect
+            catchMe.classList.add('animate__animated', 'animate__fadeOut');
+            setTimeout(() => {
+                catchMe.classList.remove('animate__animated', 'animate__fadeOut');
+                moveCatchMe();
+            }, 300);
+            
+            // Create mini celebration
+            if (score % 5 === 0) {
+                createMiniCelebration();
+            }
+            
+            // Speed up game as score increases
+            clearInterval(gameInterval);
+            gameInterval = setInterval(moveCatchMe, Math.max(300, 1500 - score * 50));
+        });
+        
+        function createMiniCelebration() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.style.position = 'absolute';
+                    star.style.width = '20px';
+                    star.style.height = '20px';
+                    star.style.backgroundColor = '#ffd43b';
+                    star.style.borderRadius = '50%';
+                    star.style.left = `${Math.random() * 100}%`;
+                    star.style.top = `${Math.random() * 100}%`;
+                    star.style.boxShadow = '0 0 10px #ffd43b';
+                    star.style.animation = 'bounce 0.5s';
+                    
+                    gameArea.appendChild(star);
+                    
+                    setTimeout(() => {
+                        star.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            startGame();
+            createBubbles();
+        });
+    </script>
+</body>
+</html>
+
